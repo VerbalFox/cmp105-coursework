@@ -16,6 +16,9 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{f2badd73-2c61-4d1a-996c-51af9b66bfe4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Characters">
+      <UniqueIdentifier>{b987b7f5-d67f-49c4-ba34-47a605c2de9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -53,6 +56,18 @@
     </ClCompile>
     <ClCompile Include="Framework\GameObject.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestChar.cpp">
+      <Filter>Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +111,18 @@
     </ClInclude>
     <ClInclude Include="Framework\GameObject.h">
       <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestChar.h">
+      <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

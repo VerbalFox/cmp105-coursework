@@ -2,22 +2,12 @@
 
 GameObject::GameObject()
 {
-	input = nullptr;
+
 }
 
 GameObject::~GameObject()
 {
 
-}
-
-// Override this function to provide input handling for the derived class
-void GameObject::handleInput(float dt)
-{
-}
-
-// override this function to provide functionality
-void GameObject::update(float dt)
-{
 }
 
 // Sets the velocity of the sprite
@@ -49,4 +39,14 @@ sf::FloatRect GameObject::getCollisionBox() {
 // e.g. checking sprite type (world, enemy, bullet etc) so response is based on that.
 void GameObject::collisionResponse(GameObject * collider)
 {
+}
+
+void GameObject::setType(ObjectType ty)
+{
+	type = ty;
+}
+
+ObjectType GameObject::getType()
+{
+	return type;
 }

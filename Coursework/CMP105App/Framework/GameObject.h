@@ -6,17 +6,14 @@
 
 #pragma once
 #include "SFML\Graphics.hpp"
-#include "Input.h"
+
+enum class ObjectType { none, floor, wall, character };
 
 class GameObject : public sf::RectangleShape
 {
 public:
 	GameObject();
 	~GameObject();
-
-	// Virtual update function. Base function does nothing (for static objects). Inheritted version will most likely override this function.
-	virtual void handleInput(float dt);
-	virtual void update(float dt);
 
 	// Control sprite speed and direction
 	void setVelocity(sf::Vector2f vel);
@@ -35,8 +32,9 @@ public:
 	void setCollisionBox(sf::FloatRect fr) { collisionBox = fr; };
 	virtual void collisionResponse(GameObject* collider);
 
-	// Set the input component
-	void setInput(Input* in) { input = in; };
+
+	void setType(ObjectType);
+	ObjectType getType();
 
 protected:
 	// Sprite properties
@@ -47,6 +45,5 @@ protected:
 	sf::FloatRect collisionBox;
 	bool collider;
 
-	// input component
-	Input* input;
+	ObjectType type = ObjectType::none;
 };
