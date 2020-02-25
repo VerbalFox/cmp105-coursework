@@ -1,8 +1,13 @@
 #pragma once
 #include "InputFrame.h"
-#include "Character.h"
+#include "Framework/Input.h"
+
 class Controller
 {
-	Character* connectedChar;
-	virtual void frameDecision();
+protected:
+	InputFrame inputBuffer[10];
+	Input* input;
+public:
+	virtual void setInput(Input*);
+	virtual InputFrame frameDecision();
 };

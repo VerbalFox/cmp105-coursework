@@ -19,6 +19,11 @@ Level::Level(sf::RenderWindow* hwnd, Input* in, GameManager* game)
 	gm->initialiseCharacters();
 
 	window->setView(*gm->getCamera());
+
+	control.setInput(in);
+
+	gm->getCharacter(0)->setController(&control);
+	gm->getCharacter(1)->setController(&control1);
 }
 
 Level::~Level()

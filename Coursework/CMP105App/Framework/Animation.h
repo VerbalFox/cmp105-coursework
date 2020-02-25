@@ -15,18 +15,18 @@ public:
 
 	// Create animation
 	void addFrame(sf::IntRect rect);
-	void setFrameSpeed(float speed);
+	void setFrameSpeed(int speed);
 	int getSize();
 
 	// update/reset animation
-	void animate(float dt);
+	void animate();
 	void reset();
 
 	// get current frame of animation
 	sf::IntRect getCurrentFrame();
 
 	// Animation controls
-	float getFrameSpeed() { return animationSpeed; };
+	int getFrameSpeed() { return animationSpeed; };
 	void setFlipped(bool flip) { flipped = flip; };
 	bool getFlipped() {	return flipped;	};
 	void setLooping(bool loop) { isLooping = loop; };
@@ -41,7 +41,7 @@ protected:
 	std::vector<sf::IntRect>frames;
 	sf::IntRect frame;
 	int currentFrame;
-	float animationSpeed;
+	int animationSpeed;
 	bool flipped;
 	bool isLooping;
 	bool isPlaying;

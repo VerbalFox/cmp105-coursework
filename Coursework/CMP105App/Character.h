@@ -1,5 +1,8 @@
 #pragma once
 #include "Framework/GameObject.h"
+#include "Framework/Animation.h"
+#include "Controller.h"
+#include "Move.h"
 
 enum class CharState
 {
@@ -10,8 +13,11 @@ enum class CharState
 	moveActive,
 	moveRecovery,
 	crouching,
+	crouchRunning,
 	launched,
 	grounded,
+	blocking,
+	stunned,
 	wakingUp,
 	hasWon,
 	death
@@ -21,6 +27,16 @@ class Character :
 	public GameObject
 {
 protected:
+	Animation idleAnim;
+	Animation runningAnim;
+	Animation crouchingAnim;
+	Animation crouchRunAnim;
+	Animation wakeupAnim;
+	Animation victoryAnim;
+
+	sf::IntRect jumpFrames[3];
+	sf::IntRect launchFrames[3];
+
 	int maxHealth = 1;
 	int health = maxHealth;
 	sf::Vector2i characterSize = sf::Vector2i(50, 100);
@@ -31,15 +47,21 @@ protected:
 	bool playerOne = false;
 
 	CharState state = CharState::idle;
-	
+	Controller* charController = nullptr;
+
 public:
 	Character();
 	~Character();
 
 	bool isPlayerOne();
 	void setPlayerNumber(int);
-	void handleInput();
 	void update();
 	void flip();
+
+	void run(float speed);
+	void jump();
+	void crouch();
+
+	void setController(Controller*);
 	void collisionResponse(GameObject*);
 };

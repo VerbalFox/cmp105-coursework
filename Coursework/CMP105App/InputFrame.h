@@ -1,20 +1,22 @@
 #pragma once
 enum class Direction {
-	forward,
-	backward,
+	none,
+	right,
+	left,
 	up,
 	down,
-	downForward,
-	downBackward,
-	upForward,
-	upBackward
+	downRight,
+	downLeft,
+	upRight,
+	upLeft
 };
 
 enum class AttackButton {
-	Button1,
-	Button2,
-	Button3,
-	Button4
+	none,
+	b1,
+	b2,
+	b3,
+	b4
 };
 
 struct InputFrame {

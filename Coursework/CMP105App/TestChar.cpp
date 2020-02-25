@@ -6,7 +6,7 @@ TestChar::TestChar()
 	health = maxHealth;
 	characterSize = sf::Vector2i(100, 100);
 	moveSpeed = 100;
-	jumpForce = 100;
+	jumpForce = 400;
 	roundsWon = 0;
 }
 

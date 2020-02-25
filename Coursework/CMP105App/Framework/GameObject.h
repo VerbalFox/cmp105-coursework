@@ -32,7 +32,6 @@ public:
 	void setCollisionBox(sf::FloatRect fr) { collisionBox = fr; };
 	virtual void collisionResponse(GameObject* collider);
 
-
 	void setType(ObjectType);
 	ObjectType getType();
 

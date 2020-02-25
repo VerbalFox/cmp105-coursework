@@ -4,10 +4,10 @@
 Animation::Animation()
 {
 	currentFrame = 0;
-	elapsedTime = 0.f;
+	elapsedTime = 0;
 	isPlaying = true;
 	isLooping = true;
-	animationSpeed = 0.0f;
+	animationSpeed = 0;
 	flipped = false;
 }
 
@@ -36,15 +36,15 @@ sf::IntRect Animation::getCurrentFrame()
 }
 
 // Check if the animation should progress, if so move to next frame, or loop back to the start
-void Animation::animate(float dt)
+void Animation::animate()
 {
 	if (isPlaying)
 	{
-		elapsedTime += dt;
-		if (elapsedTime >= animationSpeed)
+		elapsedTime += 1;
+		if (elapsedTime >= (animationSpeed / frames.size()))
 		{
 			currentFrame++;
-			if (currentFrame >= (int)frames.size())
+			if (animationSpeed >= (int)frames.size())
 			{
 				if (isLooping)
 				{
@@ -76,7 +76,7 @@ void Animation::stop()
 }
 
 // Set animation speed, in Frames per Second.
-void Animation::setFrameSpeed(float speed)
+void Animation::setFrameSpeed(int speed)
 {
 	animationSpeed = speed;
 }

@@ -19,7 +19,13 @@ GameManager::~GameManager()
 
 void GameManager::positionCamera()
 {
-	gameCamera.setCenter((characters[0]->getPosition().x + characters[1]->getPosition().x + characters[1]->getSize().x) * .5, 0);
+	float xSmoothed = gameCamera.getCenter().x + .1 * 
+		(((characters[0]->getPosition().x + characters[1]->getPosition().x + static_cast<float>(characters[1]->getSize().x)) * .5) - gameCamera.getCenter().x);
+
+	gameCamera.setCenter(
+		xSmoothed,
+		0
+	);
 }
 
 sf::View * GameManager::getCamera()

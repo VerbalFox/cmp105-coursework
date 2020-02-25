@@ -4,6 +4,7 @@
 #include "Framework/Input.h"
 #include "Framework/GameObject.h"
 #include "Framework/Collision.h"
+#include "PlayerController.h"
 #include "GameManager.h"
 #include <string>
 #include <iostream>
@@ -26,6 +27,9 @@ private:
 	sf::RenderWindow* window;
 	Input* input;
 	GameManager* gm;
+
+	PlayerController control;
+	Controller control1;
 
 	GameObject floor;
 };
