@@ -44,7 +44,7 @@ void Animation::animate()
 		if (elapsedTime >= (animationSpeed / frames.size()))
 		{
 			currentFrame++;
-			if (animationSpeed >= (int)frames.size())
+			if (currentFrame >= frames.size())
 			{
 				if (isLooping)
 				{

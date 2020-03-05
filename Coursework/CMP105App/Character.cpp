@@ -2,8 +2,7 @@
 #include <iostream>
 
 Character::Character() {
-	setSize(sf::Vector2f(characterSize.x, characterSize.y));
-	setCollisionBox(0, 0, characterSize.x, characterSize.y);
+	//setFillColor(sf::Color::White);
 }
 
 Character::~Character()
@@ -59,8 +58,13 @@ void Character::update()
 		break;
 	}
 
+	if (state == CharState::idle) {
+		idleAnim.animate();
+		setTextureRect(idleAnim.getCurrentFrame());
+	}
+
 	double time = float(1) / 60;
-	setVelocity(getVelocity().x, getVelocity().y + (500 * time));
+	setVelocity(getVelocity().x, getVelocity().y + (750 * time));
 
 	setPosition(
 		getPosition().x + (getVelocity().x * time),

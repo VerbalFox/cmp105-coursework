@@ -37,9 +37,11 @@ protected:
 	sf::IntRect jumpFrames[3];
 	sf::IntRect launchFrames[3];
 
+	sf::Texture charTexture;
+
 	int maxHealth = 1;
 	int health = maxHealth;
-	sf::Vector2i characterSize = sf::Vector2i(50, 100);
+	sf::Vector2i characterSize;
 	float moveSpeed = 10;
 	float jumpForce = 10;
 	int roundsWon = 0;

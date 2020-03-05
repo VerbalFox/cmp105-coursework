@@ -1,2 +1,30 @@
 ﻿  TestChar.cpp
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:  'argument': conversion from 'T' to 'T', possible loss of data
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:         with
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:         [
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:             T=int
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:         ]
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:         and
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:         [
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:             T=float
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,53): warning C4244:         ]
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:  'argument': conversion from 'T' to 'T', possible loss of data
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:         with
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:         [
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:             T=int
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:         ]
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:         and
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:         [
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:             T=float
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(12,36): warning C4244:         ]
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,54): warning C4244:  'argument': conversion from 'T' to 'float', possible loss of data
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,54): warning C4244:         with
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,54): warning C4244:         [
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,54): warning C4244:             T=int
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,54): warning C4244:         ]
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,37): warning C4244:  'argument': conversion from 'T' to 'float', possible loss of data
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,37): warning C4244:         with
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,37): warning C4244:         [
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,37): warning C4244:             T=int
+E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\CMP105App\TestChar.cpp(13,37): warning C4244:         ]
   CMP105App.vcxproj -> E:\!!!University\Year 1\Game Programming\cmp105-coursework-VerbalFox\Coursework\x64\Debug\CMP105App.exe
