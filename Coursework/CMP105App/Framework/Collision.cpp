@@ -1,6 +1,21 @@
 #include "Collision.h"
 
 // Check AABB for collision. Returns true if collision occurs.
+
+bool Collision::checkBoundingBox(sf::FloatRect s1, sf::FloatRect s2)
+{
+	if (s1.left + s1.width < s2.left)
+		return false;
+	if (s1.left > s2.left + s2.width)
+		return false;
+	if (s1.top + s1.height < s2.top)
+		return false;
+	if (s1.top > s2.top + s2.height)
+		return false;
+
+	return true;
+}
+
 bool Collision::checkBoundingBox(GameObject* s1, GameObject* s2)
 {
 	if (s1->getCollisionBox().left + s1->getCollisionBox().width < s2->getCollisionBox().left)

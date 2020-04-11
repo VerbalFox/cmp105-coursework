@@ -29,6 +29,10 @@ InputFrame PlayerController::frameDecision()
 		if (input->isKeyDown(tempDirectionKeys[i])) {
 			dirKeys[i] = 1;
 		}
+		if (input->isKeyDown(tempAttackKeys[i])) {
+			//input->setKeyUp(tempAttackKeys[i]);
+			attackKeys[i] = 1;
+		}
 	}
 
 	unsigned int directionNum = static_cast<unsigned int>(dirKeys.to_ulong());

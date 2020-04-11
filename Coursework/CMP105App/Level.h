@@ -4,14 +4,17 @@
 #include "Framework/Input.h"
 #include "Framework/GameObject.h"
 #include "Framework/Collision.h"
+#include "Framework/GameState.h"
 #include "PlayerController.h"
 #include "GameManager.h"
 #include <string>
 #include <iostream>
 
+#include "UIManager.h"
+
 class Level{
 public:
-	Level(sf::RenderWindow* hwnd, Input* in, GameManager* game);
+	Level(sf::RenderWindow* hwnd, Input* in, GameManager* game, GameState* gs);
 	~Level();
 
 	void handleInput();
@@ -27,6 +30,9 @@ private:
 	sf::RenderWindow* window;
 	Input* input;
 	GameManager* gm;
+	GameState* gameState;
+
+	UIManager uiManager;
 
 	PlayerController control;
 	Controller control1;

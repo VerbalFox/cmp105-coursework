@@ -8,16 +8,125 @@ Move::~Move()
 {
 }
 
-sf::IntRect Move::playMoveFrame()
+void Move::setIsMoveDamaged(bool newActive)
 {
-	return sf::IntRect();
+	moveDamaged = newActive;
+}
+
+void Move::setIsProjectileMove(bool newProjectileSet)
+{
+	isProjectileMove = newProjectileSet;
+}
+
+void Move::setMoveInput(std::vector<InputFrame> newMoveInput)
+{
+	moveInput = newMoveInput;
+}
+
+void Move::setMoveSpeeds(int newInitialSpeed, int newActiveSpeed, int newRecoverySpeed)
+{
+	initialAnim.setFrameSpeed(newInitialSpeed);
+	activeAnim.setFrameSpeed(newActiveSpeed);
+	recoveryAnim.setFrameSpeed(newRecoverySpeed);
+}
+
+void Move::setAnimations(Animation newInitial, Animation newActive, Animation newRecovery)
+{
+	initialAnim = newInitial;
+	activeAnim = newActive;
+	recoveryAnim = newRecovery;
+
+	initialAnim.setLooping(false);
+	activeAnim.setLooping(false);
+	recoveryAnim.setLooping(false);
+}
+
+void Move::setDamage(float newDamage)
+{
+	damage = newDamage;
+}
+
+void Move::setHitbox(sf::FloatRect newHitbox)
+{
+	hitbox = newHitbox;
+}
+
+void Move::setCharVelocity(sf::Vector2f newCharVelocity)
+{
+	charVelocity = newCharVelocity;
+}
+
+void Move::activateMove(bool flipped)
+{
+	isMoveActive = true;
+	moveDamaged = false;
+	isFlipped = flipped;
+	initialAnim.setFlipped(flipped);
+	activeAnim.setFlipped(flipped);
+	recoveryAnim.setFlipped(flipped);
+}
+
+void Move::performMoveFrame()
+{
+	if (isMoveActive) {
+		if (currentState == MoveState::inactive) {
+			currentState = MoveState::initial;
+			currentAnimation = &initialAnim;
+		}
+
+		if (!currentAnimation->getPlaying()) {
+			if (currentState == MoveState::initial) {
+				currentState = MoveState::active;
+				currentAnimation = &activeAnim;
+			}
+			else if (currentState == MoveState::active) {
+				currentState = MoveState::recovery;
+				currentAnimation = &recoveryAnim;
+			}
+			else if (currentState == MoveState::recovery) {
+				currentState = MoveState::inactive;
+				initialAnim.reset();
+				activeAnim.reset();
+				recoveryAnim.reset();
+				isMoveActive = false;
+			}
+		}
+	}
+
+	currentAnimation->animate();
+}
+
+sf::IntRect Move::getMoveFrame()
+{
+	return currentAnimation->getCurrentFrame();
+}
+
+bool Move::getMoveDamaged()
+{
+	return moveDamaged;
+}
+
+MoveState Move::getMoveState()
+{
+	return currentState;
+}
+
+std::vector<InputFrame> Move::getMoveInput()
+{
+	return moveInput;
 }
 
 sf::FloatRect Move::getMoveHitbox()
 {
-	return sf::FloatRect();
+	return hitbox;
 }
 
-void Move::moveHit()
+float Move::getDamage()
 {
+	return damage;
+}
+
+sf::Vector2f Move::getCharVelocity()
+{
+	return charVelocity;
 }

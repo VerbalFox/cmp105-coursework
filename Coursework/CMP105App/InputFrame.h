@@ -22,4 +22,7 @@ enum class AttackButton {
 struct InputFrame {
 	Direction direction;
 	AttackButton attack;
+	bool Equals(InputFrame inputFr) {
+		return (this->direction == inputFr.direction && this->attack == inputFr.attack) ? true : false;
+	}
 };

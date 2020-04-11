@@ -9,6 +9,7 @@
 class Collision
 {
 public:
+	static bool checkBoundingBox(sf::FloatRect s1, sf::FloatRect s2);
 	// Check AABB for collision. Returns true if collision occurs.
 	static bool checkBoundingBox(GameObject* sp1, GameObject* sp2);
 	// Check collision with box and point. Returns true if collision occurs.

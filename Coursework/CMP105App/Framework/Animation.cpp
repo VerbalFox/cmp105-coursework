@@ -66,6 +66,7 @@ void Animation::reset()
 {
 	currentFrame = 0;
 	elapsedTime = 0;
+	setPlaying(true);
 }
 
 void Animation::stop()

@@ -1,0 +1,17 @@
+﻿Startup 1, 6
+IdleAnimation 6, 16
+Left Arm Jab 17, 22
+Left Arm Elbow 23, 27
+Left Arm Long Punch 28, 35
+Left Arm Uppercut 36, 46
+Right Arm Long Punch 46, 53
+Right Arm Haymaker 54, 62
+Left Side Charge 63, 74
+
+Running 482, 489
+WakeUp 315, 325
+Crouch 729, 729
+Victory 281, 289
+
+xFrame + ((yFrame - 1) * 35)
+;

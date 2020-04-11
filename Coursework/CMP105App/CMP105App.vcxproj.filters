@@ -19,6 +19,9 @@
     <Filter Include="Characters">
       <UniqueIdentifier>{b987b7f5-d67f-49c4-ba34-47a605c2de9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UIElements">
+      <UniqueIdentifier>{59f9a3f1-fc60-492e-8b8f-3db6ee5a4576}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Animation.cpp">
@@ -74,6 +77,21 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIComponent.cpp">
+      <Filter>UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UISlider.cpp">
+      <Filter>UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>UIElements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +156,21 @@
     </ClInclude>
     <ClInclude Include="Move.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIComponent.h">
+      <Filter>UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UISlider.h">
+      <Filter>UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>UIElements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

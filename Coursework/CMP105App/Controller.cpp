@@ -1,7 +1,8 @@
 #include "Controller.h"
 
-void Controller::setInput(Input*)
+void Controller::setInput(Input* in)
 {
+	input = in;
 }
 
 InputFrame Controller::frameDecision()

@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "Framework/GameObject.h"
 #include "Framework/Animation.h"
 #include "Controller.h"
@@ -13,7 +14,6 @@ enum class CharState
 	moveActive,
 	moveRecovery,
 	crouching,
-	crouchRunning,
 	launched,
 	grounded,
 	blocking,
@@ -30,17 +30,18 @@ protected:
 	Animation idleAnim;
 	Animation runningAnim;
 	Animation crouchingAnim;
-	Animation crouchRunAnim;
 	Animation wakeupAnim;
 	Animation victoryAnim;
 
+	Animation* currentAnimation = &idleAnim;
+	
 	sf::IntRect jumpFrames[3];
 	sf::IntRect launchFrames[3];
 
 	sf::Texture charTexture;
 
-	int maxHealth = 1;
-	int health = maxHealth;
+	float maxHealth = 1;
+	float health = maxHealth;
 	sf::Vector2i characterSize;
 	float moveSpeed = 10;
 	float jumpForce = 10;
@@ -48,22 +49,38 @@ protected:
 	bool isFlipped = false;
 	bool playerOne = false;
 
+	CharState lastFrameState = CharState::idle;
 	CharState state = CharState::idle;
 	Controller* charController = nullptr;
+
+	Move* currentMove = nullptr;
+	std::vector<Move*> moveList;
+
+	sf::FloatRect lowHitbox;
+	sf::FloatRect highHitbox;
 
 public:
 	Character();
 	~Character();
+
+	float* getMaxHealth();
+	float* getHealth();
 
 	bool isPlayerOne();
 	void setPlayerNumber(int);
 	void update();
 	void flip();
 
-	void run(float speed);
 	void jump();
-	void crouch();
 
 	void setController(Controller*);
+	void hitResponse(Move*);
 	void collisionResponse(GameObject*);
+
+	Move* getCurrentMove();
+
+	std::vector<sf::RectangleShape> getDebugMoveRects();
+	sf::FloatRect getMoveRect();
+	sf::FloatRect getHighHitbox();
+	sf::FloatRect getLowHitbox();
 };

@@ -18,7 +18,9 @@ public:
 	sf::View* getCamera();
 
 	void initialiseCharacters();
-	Character* getCharacter(int);
+
+	//Returns the first character if charNum = 0, and the second if charNum = 1
+	Character* getCharacter(int charNum);
 
 	void startRound();
 	void roundEnd();

@@ -18,22 +18,39 @@ private:
 	Animation recoveryAnim;
 	float damage;
 	sf::FloatRect hitbox;
-	int initialSpeed;
-	int activeSpeed;
-	int recoverySpeed;
 	std::vector<InputFrame> moveInput;
 	sf::Vector2f charVelocity;
 
 	bool isProjectileMove = false;
+	bool isFlipped = false;
+	bool isMoveActive = false;
+	bool moveDamaged = false;
 
 	MoveState currentState = MoveState::inactive;
+	Animation* currentAnimation = nullptr;
 
 public:
 	Move();
 	~Move();
 
-	sf::IntRect playMoveFrame();
-	sf::FloatRect getMoveHitbox();
-	void moveHit();
-};
+	void setIsMoveDamaged(bool newActive);
+	void setIsProjectileMove(bool newProjectileSet);
+	void setMoveInput(std::vector<InputFrame> newMoveInput);
+	void setMoveSpeeds(int newInitialSpeed, int newActiveSpeed, int newRecoverySpeed);
+	void setAnimations(Animation newInitial, Animation newActive, Animation newRecovery);
+	void setDamage(float newDamage);
+	void setHitbox(sf::FloatRect newHitbox);
+	void setCharVelocity(sf::Vector2f newCharVelocity);
 
+	void activateMove(bool flipped);
+
+	void performMoveFrame();
+	sf::IntRect getMoveFrame();
+
+	bool getMoveDamaged();
+	MoveState getMoveState();
+	std::vector<InputFrame> getMoveInput();
+	sf::FloatRect getMoveHitbox();
+	float getDamage();
+	sf::Vector2f getCharVelocity();
+};

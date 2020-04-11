@@ -6,5 +6,8 @@ class TestChar :
 public:
 	TestChar();
 	~TestChar();
-};
 
+	Move lArmJab;
+	sf::IntRect getFrame(int frameNum);
+	Animation formAnimation(int firstFrame, int lastFrame);
+};

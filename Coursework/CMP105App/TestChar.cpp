@@ -5,55 +5,91 @@ TestChar::TestChar()
 	maxHealth = 100;
 	health = maxHealth;
 	characterSize = sf::Vector2i(225, 238);
-	moveSpeed = 100;
-	jumpForce = 400;
+	moveSpeed = 300;
+	jumpForce = 500;
 	roundsWon = 0;
 
 	setSize(sf::Vector2f(characterSize.x, characterSize.y));
 	setCollisionBox(0, 0, characterSize.x, characterSize.y);
-	setTexture(&charTexture);
 
 	if (charTexture.loadFromFile("gfx/fighter.png")) {
-
+		setTexture(&charTexture);
 	}
 
-	int xResolution = 8015;
-	int yResolution = 6902;
-	int xCels = 35;
-	int yCels = 29;
-	int xSize = 229;
-	int ySize = 238;
-	int yMargin = 16;
+	std::vector<InputFrame> tempMoveInput;
+	InputFrame tempFrame;
+	tempFrame.direction = Direction::none;
+	tempFrame.attack = AttackButton::b1;
 
-	int startingFrame = 0;
-	int xFrame = 0;
-	int yFrame = 0;
+	tempMoveInput.push_back(tempFrame);
 
+	lArmJab.setIsProjectileMove(false);
+	lArmJab.setMoveInput(tempMoveInput);
+	lArmJab.setAnimations(formAnimation(17, 3), formAnimation(20, 1), formAnimation(21, 2));
+	lArmJab.setMoveSpeeds(9, 3, 10);
+	lArmJab.setDamage(3);
+	lArmJab.setHitbox(sf::FloatRect(45, 100, 20, 10));
+	lArmJab.setCharVelocity(sf::Vector2f(100, 0));
 
-	idleAnim.setFrameSpeed(30);
+	moveList.push_back(&lArmJab);
 
-	startingFrame = 6;
-	xFrame = startingFrame;
+	highHitbox = sf::FloatRect(-40, 70, 60, 80);
+	lowHitbox = sf::FloatRect(-40, 155, 60, 90);
 
-	while (startingFrame > xCels) {
-		startingFrame -= xCels;
-		yFrame++;
-		xFrame = startingFrame;
-	}
+	idleAnim = formAnimation(6, 10);
+	idleAnim.setFrameSpeed(60);
 
-	for (int8_t i = 0; i < 10; i++)
-	{
-		idleAnim.addFrame(sf::IntRect((xFrame * xSize) + (i * xSize), (yFrame * ySize), xSize, ySize - yMargin));
+	runningAnim = formAnimation(482, 6);
+	runningAnim.setFrameSpeed(40);
 
-		if (xFrame >= xCels) {
-			yFrame++;
-			xFrame = 0;
-		}
+	wakeupAnim = formAnimation(315, 11);
+	wakeupAnim.setFrameSpeed(30);
 
-	}
+	crouchingAnim = formAnimation(729, 1);
+	crouchingAnim.setFrameSpeed(40);
+
+	victoryAnim = formAnimation(281, 9);
+	victoryAnim.setFrameSpeed(40);
 }
 
 TestChar::~TestChar()
 {
 
+}
+
+sf::IntRect TestChar::getFrame(int frameNum)
+{
+	int frameCounter = frameNum;
+
+	int xResolution = 8015;
+	int yResolution = 6902;
+	int xSize = 229;
+	int ySize = 238;
+	int yMargin = 16;
+
+	int xCels = 35;
+	int yCels = 29;
+
+	int xFrame = 0;
+	int yFrame = 0;
+
+	while (frameCounter > xCels) {
+		frameCounter -= xCels;
+		yFrame++;
+	}
+
+	xFrame = frameCounter;
+
+	return sf::IntRect((xFrame * xSize), (yFrame * ySize), xSize, ySize - yMargin);
+}
+
+Animation TestChar::formAnimation(int firstFrame, int length)
+{
+	Animation temp;
+
+	for (int i = 0; i < length; i++) {
+		temp.addFrame(getFrame(i + firstFrame));
+	}
+
+	return temp;
 }
