@@ -24,9 +24,11 @@ void UIManager::addSlider(float posX, float posY, float sizeX, float sizeY, sf::
 	sliders.push_back(tempSlider);
 }
 
-void UIManager::addButton(float posX, float posY, float sizeX, float sizeY)
+void UIManager::addButton(float posX, float posY, float sizeX, float sizeY, GameState* gs, State s)
 {
 	UIButton tempButton(posX, posY, sizeX, sizeY, window, input);
+	tempButton.setGameState(gs);
+	tempButton.setTargetState(s);
 	buttons.push_back(tempButton);
 }
 

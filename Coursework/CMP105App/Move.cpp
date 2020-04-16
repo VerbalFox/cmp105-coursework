@@ -56,14 +56,31 @@ void Move::setCharVelocity(sf::Vector2f newCharVelocity)
 	charVelocity = newCharVelocity;
 }
 
+void Move::setAvailableFromState(CharState state)
+{
+	availableFromState = state;
+}
+
+void Move::setStunnedFrames(int stunnedFr)
+{
+	stunnedFrames = stunnedFr;
+}
+
+void Move::setBlockedFrames(int blockedFr)
+{
+	blockedFrames = blockedFr;
+}
+
 void Move::activateMove(bool flipped)
 {
-	isMoveActive = true;
-	moveDamaged = false;
-	isFlipped = flipped;
-	initialAnim.setFlipped(flipped);
-	activeAnim.setFlipped(flipped);
-	recoveryAnim.setFlipped(flipped);
+	if (!isMoveActive) {
+		isMoveActive = true;
+		moveDamaged = false;
+		isFlipped = flipped;
+		initialAnim.setFlipped(flipped);
+		activeAnim.setFlipped(flipped);
+		recoveryAnim.setFlipped(flipped);
+	}
 }
 
 void Move::performMoveFrame()
@@ -116,6 +133,11 @@ std::vector<InputFrame> Move::getMoveInput()
 	return moveInput;
 }
 
+CharState Move::getMoveStartingState()
+{
+	return availableFromState;
+}
+
 sf::FloatRect Move::getMoveHitbox()
 {
 	return hitbox;
@@ -129,4 +151,14 @@ float Move::getDamage()
 sf::Vector2f Move::getCharVelocity()
 {
 	return charVelocity;
+}
+
+int Move::getStunnedFrames()
+{
+	return stunnedFrames;
+}
+
+int Move::getBlockedFrames()
+{
+	return blockedFrames;
 }

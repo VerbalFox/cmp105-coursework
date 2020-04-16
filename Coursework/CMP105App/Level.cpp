@@ -22,10 +22,11 @@ Level::Level(sf::RenderWindow* hwnd, Input* in, GameManager* game, GameState* gs
 	window->setView(*gm->getCamera());
 
 	control.setInput(in);
-	control1.setInput(in);
 
 	gm->getCharacter(0)->setController(&control);
 	gm->getCharacter(1)->setController(&control1);
+	gm->getCharacter(0)->resetCharacter();
+	gm->getCharacter(1)->resetCharacter();
 
 	uiManager.setWindow(window);
 	uiManager.setInput(input);
@@ -50,6 +51,7 @@ void Level::handleInput()
 // Update game objects
 void Level::update()
 {
+	gm->update();
 	gm->getCharacter(0)->update();
 	gm->getCharacter(1)->update();
 	gm->positionCamera();
@@ -73,7 +75,8 @@ void Level::update()
 		}
 
 		if (Collision::checkBoundingBox(gm->getCharacter((i - 1) * -1)->getMoveRect(), gm->getCharacter(i)->getHighHitbox())) {
-			if (gm->getCharacter((i - 1) * -1)->getCurrentMove() != nullptr && gm->getCharacter((i - 1) * -1)->getCurrentMove()->getMoveState() == MoveState::active) {
+			if (gm->getCharacter((i - 1) * -1)->getCurrentMove() != nullptr && 
+				gm->getCharacter((i - 1) * -1)->getCurrentMove()->getMoveState() == MoveState::active) {
 				gm->getCharacter(i)->hitResponse(gm->getCharacter((i - 1) * -1)->getCurrentMove());
 			}
 		}

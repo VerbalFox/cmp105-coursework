@@ -6,6 +6,7 @@
 class PlayerController :
 	public Controller
 {
+	Input* input;
 public:
 	void setInput(Input*);
 	InputFrame frameDecision() override;

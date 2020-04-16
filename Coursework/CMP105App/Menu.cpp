@@ -9,7 +9,7 @@ Menu::Menu(sf::RenderWindow* hwnd, Input* in, GameState* gs)
 	uiManager.setWindow(window);
 	uiManager.setInput(input);
 
-	uiManager.addButton(80, 80, 20, 20);
+	uiManager.addButton(10, 10, 80, 20, gameState, State::LEVEL);
 }
 
 Menu::~Menu()

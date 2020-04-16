@@ -19,6 +19,11 @@ float* Character::getHealth()
 	return &health;
 }
 
+void Character::setFacingLeft(bool facingLe)
+{
+	facingLeft = facingLe;
+}
+
 bool Character::isPlayerOne()
 {
 	return playerOne;
@@ -38,13 +43,49 @@ void Character::update()
 {
 	InputFrame thisFrame = charController->frameDecision();
 
+	if (health <= 0 && !hasDied) {
+		hasDied = true;
+		state = CharState::launched;
+	}
+
+	if (!currentAnimation->getPlaying()) {
+		switch (state)
+		{
+		case CharState::blocking:
+			state = CharState::idle;
+			break;
+		case CharState::stunned:
+			state = CharState::idle;
+			break;
+		case CharState::wakingUp:
+			break;
+		case CharState::hasWon:
+			break;
+		default:
+			break;
+		}
+	}
+
+	//Check move list for move to run based on this frames input.
 	for (std::vector<Move*>::iterator it = moveList.begin(); it != moveList.end(); ++it) {
-		if ((*it)->getMoveInput().capacity() == 1) {
-			if ((*it)->getMoveInput()[0].Equals(thisFrame)) {
-				currentMove = (*it);
-				currentMove->activateMove(isFlipped);
-				state = CharState::moveInitial;
+		bool performMove = true;
+		for (int i = 0; i < (*it)->getMoveInput().capacity(); i++) {
+			if (!isFlipped) {
+				if (!(*it)->getMoveInput()[i].Equals(charController->getInputBuffer()[i])) {
+					performMove = false;
+				}
 			}
+			else {
+				if (!(*it)->getMoveInput()[i].Equals(charController->getInputBuffer()[i].Flipped(charController->getInputBuffer()[i]))) {
+					performMove = false;
+				}
+			}
+		}
+		if (performMove && (*it)->getMoveStartingState() == state) {
+			currentMove = (*it);
+			currentMove->activateMove(isFlipped);
+			state = CharState::moveInitial;
+			break;
 		}
 	}
 
@@ -68,19 +109,13 @@ void Character::update()
 	case Direction::right:
 		if (state == CharState::idle) {
 			state = CharState::running;
-
-			if (isFlipped) {
-				isFlipped = false;
-			}
+			flip();
 		}
 		break;
 	case Direction::left:
 		if (state == CharState::idle) {
 			state = CharState::running;
-
-			if (!isFlipped) {
-				isFlipped = true;
-			}
+			flip();
 		}
 		break;
 	case Direction::none:
@@ -107,7 +142,7 @@ void Character::update()
 			state = CharState::moveRecovery;
 		}
 		else if (currentMove->getMoveState() == MoveState::inactive) {
-			state = CharState::idle;
+			state = currentMove->getMoveStartingState();
 		}
 	}
 	else {
@@ -121,7 +156,7 @@ void Character::update()
 		switch (state) {
 		case CharState::running:
 			currentAnimation = &runningAnim;
-			if (isFlipped) {
+			if (thisFrame.direction == Direction::left) {
 				velocity.x = -moveSpeed;
 			}
 			else {
@@ -133,7 +168,32 @@ void Character::update()
 			currentAnimation = &idleAnim;
 			break;
 		case CharState::jumping:
+			if (lastFrameState == CharState::idle || lastFrameState == CharState::running) {
+				move(0, -5);
+				velocity.y = -jumpForce;
+			}
+			break;
+		case CharState::launched:
 			velocity.y = -jumpForce;
+			move(0, -5);
+			if (isFlipped) {
+				velocity.x = moveSpeed * .2;
+			}
+			else {
+				velocity.x = -moveSpeed * .2;
+			}
+			break;
+		case CharState::crouching:
+			velocity.x = 0;
+			currentAnimation = &crouchingAnim;
+			break;
+		case CharState::stunned:
+			velocity.x = 0;
+			currentAnimation = &stunAnim;
+			break;
+		case CharState::blocking:
+			velocity.x = 0;
+			currentAnimation = &blockAnim;
 			break;
 		}
 	}
@@ -145,20 +205,41 @@ void Character::update()
 	case CharState::running:
 		break;
 	case CharState::jumping:
+		if (velocity.y < -300) {
+			setTextureRect(getJumpFrame(0));
+		}
+		else if (velocity.y > 300) {
+			setTextureRect(getJumpFrame(2));
+		}
+		else {
+			setTextureRect(getJumpFrame(1));
+		}
 		break;
 	case CharState::moveInitial:
-		setVelocity(currentMove->getCharVelocity().x, currentMove->getCharVelocity().y);
+		setVelocity(currentMove->getCharVelocity().x * ((isFlipped) ? -1 : 1), currentMove->getCharVelocity().y);
 		break;
 	case CharState::moveActive:
-		setVelocity(currentMove->getCharVelocity().x, currentMove->getCharVelocity().y);
+		setVelocity(currentMove->getCharVelocity().x * ((isFlipped) ? -1 : 1), currentMove->getCharVelocity().y);
 		break;
 	case CharState::moveRecovery:
 		break;
 	case CharState::crouching:
 		break;
 	case CharState::launched:
+		if (velocity.y < -300) {
+			setTextureRect(getLaunchFrame(0));
+		}
+		else if (velocity.y > 300) {
+			setTextureRect(getLaunchFrame(2));
+		}
+		else {
+			setTextureRect(getLaunchFrame(1));
+		}
 		break;
 	case CharState::grounded:
+		setTextureRect(getGroundedFrame());
+		velocity.x = 0;
+		velocity.y = 0;
 		break;
 	case CharState::blocking:
 		break;
@@ -177,7 +258,7 @@ void Character::update()
 	double time = static_cast<float>(1) / 60;
 	
 	if (state != CharState::moveInitial && state != CharState::moveActive) {
-		setVelocity(getVelocity().x, getVelocity().y + (750 * time));
+		setVelocity(getVelocity().x, getVelocity().y + (400 * time));
 	}
 	
 	setPosition(
@@ -190,7 +271,7 @@ void Character::update()
 
 void Character::flip()
 {
-	if (!isFlipped) {
+	if (!facingLeft) {
 		isFlipped = true;
 	}
 	else {
@@ -207,6 +288,14 @@ void Character::jump()
 	}
 }
 
+void Character::resetCharacter()
+{
+	health = maxHealth;
+	state = CharState::idle;
+	hasDied = false;
+	flip();
+}
+
 void Character::setController(Controller* tempController)
 {
 	charController = tempController;
@@ -217,7 +306,16 @@ void Character::hitResponse(Move* curMove)
 	if (!curMove->getMoveDamaged()) {
 		curMove->setIsMoveDamaged(true);
 		health -= curMove->getDamage();
+		stunAnim.setFrameSpeed(curMove->getStunnedFrames());
+		if (state == CharState::launched) {
+			velocity.x *= ((isFlipped) ? -1.1 : 1.1);
+			velocity.y = -jumpForce;
+		}
+		else {
+			state = CharState::stunned;
+		}
 	}
+
 }
 
 void Character::collisionResponse(GameObject* collider)
@@ -232,6 +330,9 @@ void Character::collisionResponse(GameObject* collider)
 	}
 
 	if (collider->getType() == ObjectType::floor) {
+		if (state == CharState::launched) {
+			state = CharState::grounded;
+		}
 		if (state == CharState::jumping) {
 			state = CharState::idle;
 		}
@@ -318,5 +419,32 @@ sf::FloatRect Character::getLowHitbox()
 		temp.left = getPosition().x + (getSize().x / 2) + lowHitbox.left;
 	}
 	temp.top = lowHitbox.top + getPosition().y;
+	return temp;
+}
+
+sf::IntRect Character::getJumpFrame(int frame)
+{
+	sf::IntRect temp = jumpFrames[frame];
+	if (isFlipped) {
+		temp = sf::IntRect(temp.left + temp.width, temp.top, -temp.width, temp.height);
+	}
+	return temp;
+}
+
+sf::IntRect Character::getLaunchFrame(int frame)
+{
+	sf::IntRect temp = launchFrames[frame];
+	if (isFlipped) {
+		temp = sf::IntRect(temp.left + temp.width, temp.top, -temp.width, temp.height);
+	}
+	return temp;
+}
+
+sf::IntRect Character::getGroundedFrame()
+{
+	sf::IntRect temp = groundedFrame;
+	if (isFlipped) {
+		temp = sf::IntRect(temp.left + temp.width, temp.top, -temp.width, temp.height);
+	}
 	return temp;
 }

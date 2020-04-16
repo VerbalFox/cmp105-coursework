@@ -2,11 +2,11 @@
 
 TestChar::TestChar()
 {
-	maxHealth = 100;
+	maxHealth = 10;
 	health = maxHealth;
 	characterSize = sf::Vector2i(225, 238);
 	moveSpeed = 300;
-	jumpForce = 500;
+	jumpForce = 400;
 	roundsWon = 0;
 
 	setSize(sf::Vector2f(characterSize.x, characterSize.y));
@@ -18,9 +18,9 @@ TestChar::TestChar()
 
 	std::vector<InputFrame> tempMoveInput;
 	InputFrame tempFrame;
+
 	tempFrame.direction = Direction::none;
 	tempFrame.attack = AttackButton::b1;
-
 	tempMoveInput.push_back(tempFrame);
 
 	lArmJab.setIsProjectileMove(false);
@@ -28,8 +28,11 @@ TestChar::TestChar()
 	lArmJab.setAnimations(formAnimation(17, 3), formAnimation(20, 1), formAnimation(21, 2));
 	lArmJab.setMoveSpeeds(9, 3, 10);
 	lArmJab.setDamage(3);
-	lArmJab.setHitbox(sf::FloatRect(45, 100, 20, 10));
-	lArmJab.setCharVelocity(sf::Vector2f(100, 0));
+	lArmJab.setHitbox(sf::FloatRect(45, 100, 2000, 10));
+	lArmJab.setCharVelocity(sf::Vector2f(10, 0));
+	lArmJab.setAvailableFromState(CharState::idle);
+	lArmJab.setStunnedFrames(10);
+	lArmJab.setBlockedFrames(10);
 
 	moveList.push_back(&lArmJab);
 
@@ -50,6 +53,25 @@ TestChar::TestChar()
 
 	victoryAnim = formAnimation(281, 9);
 	victoryAnim.setFrameSpeed(40);
+
+	stunAnim = formAnimation(492, 4);
+	stunAnim.setFrameSpeed(10);
+
+	blockAnim = formAnimation(917, 1);
+	blockAnim.setFrameSpeed(10);
+
+	stunAnim.setLooping(false);
+	blockAnim.setLooping(false);
+
+	jumpFrames[0] = getFrame(556);
+	jumpFrames[1] = getFrame(559);
+	jumpFrames[2] = getFrame(560);
+
+	launchFrames[0] = getFrame(962);
+	launchFrames[1] = getFrame(964);
+	launchFrames[2] = getFrame(967);
+
+	groundedFrame = getFrame(973);
 }
 
 TestChar::~TestChar()
@@ -73,7 +95,7 @@ sf::IntRect TestChar::getFrame(int frameNum)
 	int xFrame = 0;
 	int yFrame = 0;
 
-	while (frameCounter > xCels) {
+	while (frameCounter >= xCels) {
 		frameCounter -= xCels;
 		yFrame++;
 	}

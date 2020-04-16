@@ -18,7 +18,7 @@ public:
 	void setInput(Input* in);
 
 	void addSlider(float posX, float posY, float sizeX, float sizeY, sf::Color outlineColour, sf::Color filledColour, float* maxValue, float* displayValue);
-	void addButton(float posX, float posY, float sizeX, float sizeY);
+	void addButton(float posX, float posY, float sizeX, float sizeY, GameState* gs, State s);
 	void update();
 	void draw();
 };

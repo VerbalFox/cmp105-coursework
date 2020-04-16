@@ -10,6 +10,11 @@ class UIButton :
 {
 public:
 	UIButton(float posX, float posY, float sizeX, float sizeY, sf::RenderWindow* wi, Input* in);
+	void setGameState(GameState* gs);
+	void setTargetState(State s);
+
+	void changeState(State s);
+
 	void setInput(Input* in);
 	void update() override;
 	void draw() override;
@@ -19,6 +24,9 @@ private:
 	sf::Texture hoverButton;
 
 	Input* input;
+	GameState* gameState;
+
+	State targetState;
 
 	bool isMouseDownLastFrame = false;
 

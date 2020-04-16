@@ -10,6 +10,21 @@ UIButton::UIButton(float posX, float posY, float sizeX, float sizeY, sf::RenderW
 	setCollisionBox(sf::FloatRect(0, 0, getSize().x, getSize().y));
 }
 
+void UIButton::setGameState(GameState* gs)
+{
+	gameState = gs;
+}
+
+void UIButton::setTargetState(State s)
+{
+	targetState = s;
+}
+
+void UIButton::changeState(State s)
+{
+	gameState->setCurrentState(s);
+}
+
 void UIButton::setInput(Input* in)
 {
 	input = in;
@@ -31,7 +46,7 @@ void UIButton::update()
 	if (Collision::checkBoundingBox(this, temp)) {
 		setFillColor(sf::Color::White);
 		if (isMouseDownLastFrame && !input->isMouseLDown()) {
-			buttonFunction();
+			changeState(targetState);
 		}
 	}
 	else {

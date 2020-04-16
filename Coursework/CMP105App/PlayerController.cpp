@@ -8,6 +8,7 @@ void PlayerController::setInput(Input* in)
 InputFrame PlayerController::frameDecision()
 {
 	InputFrame temp = InputFrame();
+
 	sf::Keyboard::Key tempDirectionKeys[4] = {
 		sf::Keyboard::W,
 		sf::Keyboard::A,
@@ -30,7 +31,7 @@ InputFrame PlayerController::frameDecision()
 			dirKeys[i] = 1;
 		}
 		if (input->isKeyDown(tempAttackKeys[i])) {
-			//input->setKeyUp(tempAttackKeys[i]);
+			input->setKeyUp(tempAttackKeys[i]);
 			attackKeys[i] = 1;
 		}
 	}
@@ -86,13 +87,8 @@ InputFrame PlayerController::frameDecision()
 		break;
 	}
 
-	if (inputBuffer[9].direction != temp.direction || inputBuffer[9].attack != temp.attack) {
-		for (int i = 1; i < 10; i++) {
-			inputBuffer[i - 1] = inputBuffer[i];
-		}
-
-		inputBuffer[9] = temp;
+	if (!inputBuffer[0].Equals(temp)) {
+		pushFrameToBuffer(temp);
 	}
-
 	return temp;
 }

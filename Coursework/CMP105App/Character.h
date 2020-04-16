@@ -5,23 +5,7 @@
 #include "Controller.h"
 #include "Move.h"
 
-enum class CharState
-{
-	idle,
-	running,
-	jumping,
-	moveInitial,
-	moveActive,
-	moveRecovery,
-	crouching,
-	launched,
-	grounded,
-	blocking,
-	stunned,
-	wakingUp,
-	hasWon,
-	death
-};
+#include <iostream>
 
 class Character :
 	public GameObject
@@ -33,10 +17,14 @@ protected:
 	Animation wakeupAnim;
 	Animation victoryAnim;
 
+	Animation stunAnim;
+	Animation blockAnim;
+
 	Animation* currentAnimation = &idleAnim;
 	
 	sf::IntRect jumpFrames[3];
 	sf::IntRect launchFrames[3];
+	sf::IntRect groundedFrame;
 
 	sf::Texture charTexture;
 
@@ -46,8 +34,13 @@ protected:
 	float moveSpeed = 10;
 	float jumpForce = 10;
 	int roundsWon = 0;
+
+	bool facingLeft = false;
 	bool isFlipped = false;
+
 	bool playerOne = false;
+
+	bool hasDied = false;
 
 	CharState lastFrameState = CharState::idle;
 	CharState state = CharState::idle;
@@ -65,13 +58,15 @@ public:
 
 	float* getMaxHealth();
 	float* getHealth();
+	void setFacingLeft(bool facingLe);
 
 	bool isPlayerOne();
 	void setPlayerNumber(int);
 	void update();
 	void flip();
-
 	void jump();
+
+	void resetCharacter();
 
 	void setController(Controller*);
 	void hitResponse(Move*);
@@ -83,4 +78,8 @@ public:
 	sf::FloatRect getMoveRect();
 	sf::FloatRect getHighHitbox();
 	sf::FloatRect getLowHitbox();
+
+	sf::IntRect getJumpFrame(int frame);
+	sf::IntRect getLaunchFrame(int frame);
+	sf::IntRect getGroundedFrame();
 };

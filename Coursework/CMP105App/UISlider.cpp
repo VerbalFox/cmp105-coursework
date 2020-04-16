@@ -21,6 +21,7 @@ void UISlider::setSliderColours(sf::Color out, sf::Color sli)
 	outline.setOutlineThickness(3);
 
 	outline.setOutlineColor(out);
+	outline.setFillColor(sf::Color::Red);
 	slider.setFillColor(sli);
 }
 
@@ -43,6 +44,6 @@ void UISlider::update()
 
 void UISlider::draw()
 {
-	window->draw(slider);
 	window->draw(outline);
+	window->draw(slider);
 }

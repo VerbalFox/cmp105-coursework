@@ -1,13 +1,16 @@
 #pragma once
 #include "InputFrame.h"
 #include "Framework/Input.h"
+#include <deque>
 
 class Controller
 {
 protected:
-	InputFrame inputBuffer[10];
-	Input* input;
+	std::deque<InputFrame> inputBuffer = {InputFrame()};
 public:
-	virtual void setInput(Input*);
+	Controller();
 	virtual InputFrame frameDecision();
+	void pushFrameToBuffer(InputFrame frame);
+
+	std::deque<InputFrame> getInputBuffer();
 };

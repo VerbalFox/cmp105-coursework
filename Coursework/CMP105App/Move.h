@@ -8,6 +8,24 @@ enum class MoveState {
 	initial,
 	active,
 	recovery
+}; 
+
+enum class CharState
+{
+	idle,
+	running,
+	jumping,
+	moveInitial,
+	moveActive,
+	moveRecovery,
+	crouching,
+	launched,
+	grounded,
+	blocking,
+	stunned,
+	wakingUp,
+	hasWon,
+	death
 };
 
 class Move
@@ -17,9 +35,13 @@ private:
 	Animation activeAnim;
 	Animation recoveryAnim;
 	float damage;
+	int stunnedFrames;
+	int blockedFrames;
 	sf::FloatRect hitbox;
 	std::vector<InputFrame> moveInput;
 	sf::Vector2f charVelocity;
+
+	CharState availableFromState;
 
 	bool isProjectileMove = false;
 	bool isFlipped = false;
@@ -41,6 +63,9 @@ public:
 	void setDamage(float newDamage);
 	void setHitbox(sf::FloatRect newHitbox);
 	void setCharVelocity(sf::Vector2f newCharVelocity);
+	void setAvailableFromState(CharState state);
+	void setStunnedFrames(int stunnedFr);
+	void setBlockedFrames(int blockedFr);
 
 	void activateMove(bool flipped);
 
@@ -50,7 +75,10 @@ public:
 	bool getMoveDamaged();
 	MoveState getMoveState();
 	std::vector<InputFrame> getMoveInput();
+	CharState getMoveStartingState();
 	sf::FloatRect getMoveHitbox();
 	float getDamage();
 	sf::Vector2f getCharVelocity();
+	int getStunnedFrames();
+	int getBlockedFrames();
 };

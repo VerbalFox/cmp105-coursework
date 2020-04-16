@@ -10,6 +10,10 @@ GameManager::GameManager()
 			characters[i]->flip();
 		}
 	}
+
+	//networkManager->setup();
+
+	roundEnded = false;
 }
 
 GameManager::~GameManager()
@@ -34,9 +38,36 @@ void GameManager::positionCamera()
 	);
 }
 
+void GameManager::update()
+{
+	frameTimestamp++;
+
+	//networkManager->playFrame(frameTimestamp);
+
+	adjustCharacterFlip();
+
+	if (*characters[0]->getHealth() <= 0 && !roundEnded) {
+		roundEnded = true;
+		cl.restart();
+	}
+	else if (*characters[1]->getHealth() <= 0 && !roundEnded) {
+		roundEnded = true;
+		cl.restart();
+	}
+
+	if (roundEnded && cl.getElapsedTime().asSeconds() > 5) {
+		roundEnd();
+	}
+}
+
 sf::View * GameManager::getCamera()
 {
 	return &gameCamera;
+}
+
+sf::Uint32 GameManager::getFrameTimestamp()
+{
+	return frameTimestamp;
 }
 
 void GameManager::initialiseCharacters()
@@ -48,10 +79,36 @@ void GameManager::initialiseCharacters()
 		else {
 			characters[i]->setPosition(300, -200);
 		}
+		adjustCharacterFlip();
+		characters[i]->setVelocity(sf::Vector2f(0, 0));
+		characters[i]->resetCharacter();
+	}
+}
+
+void GameManager::adjustCharacterFlip()
+{
+	if (characters[0]->getPosition().x < characters[1]->getPosition().x) {
+		characters[0]->setFacingLeft(true);
+		characters[1]->setFacingLeft(false);
+	}
+	else {
+		characters[0]->setFacingLeft(false);
+		characters[1]->setFacingLeft(true);
 	}
 }
 
 Character* GameManager::getCharacter(int x)
 {
 	return characters[x];
+}
+
+void GameManager::startRound()
+{
+	initialiseCharacters();
+}
+
+void GameManager::roundEnd()
+{
+	roundEnded = false;
+	startRound();
 }
