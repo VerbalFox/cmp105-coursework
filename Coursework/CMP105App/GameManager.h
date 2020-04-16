@@ -4,7 +4,7 @@
 #include "Character.h"
 #include "TestChar.h"
 
-//#include "NetworkManager.h"
+#include "NetworkController.h"
 
 static class GameManager
 {
@@ -14,8 +14,8 @@ private:
 	bool roundEnded;
 	sf::Clock cl;
 	sf::Uint32 frameTimestamp = 0;
-
-	//NetworkManager* networkManager = new NetworkManager();
+	
+	NetworkController* networkManager = new NetworkController();
 
 public:
 	GameManager();

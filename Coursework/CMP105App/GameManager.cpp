@@ -11,7 +11,7 @@ GameManager::GameManager()
 		}
 	}
 
-	//networkManager->setup();
+	networkManager->setup();
 
 	roundEnded = false;
 }
@@ -42,7 +42,7 @@ void GameManager::update()
 {
 	frameTimestamp++;
 
-	//networkManager->playFrame(frameTimestamp);
+	networkManager->playFrame(frameTimestamp);
 
 	adjustCharacterFlip();
 
