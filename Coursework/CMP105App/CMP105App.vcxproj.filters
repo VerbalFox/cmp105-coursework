@@ -93,8 +93,14 @@
     <ClCompile Include="UIManager.cpp">
       <Filter>UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="NetworkController.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIText.cpp">
+      <Filter>UIElements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,8 +181,17 @@
     <ClInclude Include="UIManager.h">
       <Filter>UIElements</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="NetworkController.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIText.h">
+      <Filter>UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElementID.h">
+      <Filter>UIElements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

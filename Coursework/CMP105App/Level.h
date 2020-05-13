@@ -1,11 +1,10 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
 #include "Framework/Input.h"
 #include "Framework/GameObject.h"
 #include "Framework/Collision.h"
 #include "Framework/GameState.h"
-#include "PlayerController.h"
+#include "Framework/AudioManager.h"
 #include "GameManager.h"
 #include <string>
 #include <iostream>
@@ -14,7 +13,7 @@
 
 class Level{
 public:
-	Level(sf::RenderWindow* hwnd, Input* in, GameManager* game, GameState* gs);
+	Level(sf::RenderWindow* hwnd, Input* in, GameManager* game, GameState* gs, AudioManager* am);
 	~Level();
 
 	void handleInput();
@@ -31,11 +30,11 @@ private:
 	Input* input;
 	GameManager* gm;
 	GameState* gameState;
+	AudioManager* audioManager;
 
 	UIManager uiManager;
 
-	PlayerController control;
-	Controller control1;
-
 	GameObject floor;
+
+	bool isPaused = false;
 };

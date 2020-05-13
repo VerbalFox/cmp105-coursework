@@ -159,7 +159,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)/SFML/lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug2|x64'">
@@ -218,7 +218,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)/SFML/lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;sfml-network.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -240,12 +240,14 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Move.cpp" />
     <ClCompile Include="NetworkController.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="TestChar.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UISlider.cpp" />
+    <ClCompile Include="UIText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="DO_NOT_EDIT.txt" />
@@ -270,12 +272,15 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="NetworkController.h" />
+    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="TestChar.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="UIElementID.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UISlider.h" />
+    <ClInclude Include="UIText.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

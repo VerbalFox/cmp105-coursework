@@ -2,6 +2,7 @@
 #include <iostream>
 
 Character::Character() {
+	//Set type on GameObject
 	type = ObjectType::character;
 }
 
@@ -31,6 +32,7 @@ bool Character::isPlayerOne()
 
 void Character::setPlayerNumber(int i)
 {
+	//For positioning, stat tracking, etc.
 	if (i == 1) {
 		playerOne = true;
 	}
@@ -39,15 +41,46 @@ void Character::setPlayerNumber(int i)
 	}
 }
 
+InputFrame Character::handleInput()
+{
+	currentFrame = charController->frameDecision();
+
+	return currentFrame;
+}
+
 void Character::update()
 {
-	InputFrame thisFrame = charController->frameDecision();
+	//Check move list for move to run based on this frames input.
+	for (std::vector<Move*>::iterator it = moveList.begin(); it != moveList.end(); ++it) {
+		bool performMove = true;
+		for (int i = 0; i < (*it)->getMoveInput().capacity(); i++) {
+			if (!isFlipped) {
+				if (!(*it)->getMoveInput()[i].Equals(charController->getInputBuffer()[i])) {
+					performMove = false;
+				}
+			}
+			else {
+				if (!(*it)->getMoveInput()[i].Equals(charController->getInputBuffer()[i].Flipped(charController->getInputBuffer()[i]))) {
+					performMove = false;
+				}
+			}
+		}
+		//If inputs check out and the current character state matches the move
+		if (performMove && (*it)->getMoveStartingState() == state) {
+			currentMove = (*it);
+			currentMove->activateMove(isFlipped);
+			state = CharState::moveInitial;
+			break;
+		}
+	}
 
+	//Death check
 	if (health <= 0 && !hasDied) {
 		hasDied = true;
 		state = CharState::launched;
 	}
 
+	//If animation attached to state that doesn't loop finishes, reset state. Several unused here.
 	if (!currentAnimation->getPlaying()) {
 		switch (state)
 		{
@@ -66,30 +99,8 @@ void Character::update()
 		}
 	}
 
-	//Check move list for move to run based on this frames input.
-	for (std::vector<Move*>::iterator it = moveList.begin(); it != moveList.end(); ++it) {
-		bool performMove = true;
-		for (int i = 0; i < (*it)->getMoveInput().capacity(); i++) {
-			if (!isFlipped) {
-				if (!(*it)->getMoveInput()[i].Equals(charController->getInputBuffer()[i])) {
-					performMove = false;
-				}
-			}
-			else {
-				if (!(*it)->getMoveInput()[i].Equals(charController->getInputBuffer()[i].Flipped(charController->getInputBuffer()[i]))) {
-					performMove = false;
-				}
-			}
-		}
-		if (performMove && (*it)->getMoveStartingState() == state) {
-			currentMove = (*it);
-			currentMove->activateMove(isFlipped);
-			state = CharState::moveInitial;
-			break;
-		}
-	}
-
-	switch (thisFrame.direction) {
+	//Perform generic actions based on input. Running, jumping, etc.
+	switch (currentFrame.direction) {
 	case Direction::up:
 		jump();
 		break;
@@ -125,6 +136,7 @@ void Character::update()
 		break;
 	}
 
+	//Flip animation.
 	if (isFlipped) {
 		currentAnimation->setFlipped(true);
 	}
@@ -132,6 +144,7 @@ void Character::update()
 		currentAnimation->setFlipped(false);
 	}
 
+	//Move progression and logic.
 	if (state == CharState::moveInitial || state == CharState::moveActive || state == CharState::moveRecovery) {
 		currentMove->performMoveFrame();
 		setTextureRect(currentMove->getMoveFrame());
@@ -143,20 +156,22 @@ void Character::update()
 		}
 		else if (currentMove->getMoveState() == MoveState::inactive) {
 			state = currentMove->getMoveStartingState();
+			currentMove = nullptr;
 		}
 	}
 	else {
 		currentAnimation->animate();
 		setTextureRect(currentAnimation->getCurrentFrame());
 	}
-	
+
+	//State transitions. When a state changes, values are adjusted here.
 	if (lastFrameState != state) {
 		currentAnimation->reset();
 
 		switch (state) {
 		case CharState::running:
 			currentAnimation = &runningAnim;
-			if (thisFrame.direction == Direction::left) {
+			if (currentFrame.direction == Direction::left) {
 				velocity.x = -moveSpeed;
 			}
 			else {
@@ -198,6 +213,7 @@ void Character::update()
 		}
 	}
 
+	//Generic state logic. Used to adjust things like jumping frames since they're dependent on the y-velocity.
 	switch (state)
 	{
 	case CharState::idle:
@@ -240,6 +256,7 @@ void Character::update()
 		setTextureRect(getGroundedFrame());
 		velocity.x = 0;
 		velocity.y = 0;
+		state == CharState::idle;
 		break;
 	case CharState::blocking:
 		break;
@@ -250,15 +267,17 @@ void Character::update()
 	case CharState::hasWon:
 		break;
 	case CharState::death:
+		setTextureRect(getGroundedFrame());
+		velocity.x = 0;
+		velocity.y = 0;
 		break;
 	default:
 		break;
 	}
 	
-	double time = static_cast<float>(1) / 60;
-	
+	//Position adjustments.
 	if (state != CharState::moveInitial && state != CharState::moveActive) {
-		setVelocity(getVelocity().x, getVelocity().y + (400 * time));
+		setVelocity(getVelocity().x, getVelocity().y + (gravity * time));
 	}
 	
 	setPosition(
@@ -271,6 +290,7 @@ void Character::update()
 
 void Character::flip()
 {
+	//Flip to direction indicted by the GameManager.
 	if (!facingLeft) {
 		isFlipped = true;
 	}
@@ -281,6 +301,7 @@ void Character::flip()
 
 void Character::jump()
 {
+	//Jump if states allow for it.
 	if (state == CharState::idle ||
 		state == CharState::running
 		) {
@@ -290,6 +311,7 @@ void Character::jump()
 
 void Character::resetCharacter()
 {
+	//Reset character values.
 	health = maxHealth;
 	state = CharState::idle;
 	hasDied = false;
@@ -303,13 +325,17 @@ void Character::setController(Controller* tempController)
 
 void Character::hitResponse(Move* curMove)
 {
+	//Check if move has caused damage yet. If not, cause damage and run move hit logic.
 	if (!curMove->getMoveDamaged()) {
 		curMove->setIsMoveDamaged(true);
 		health -= curMove->getDamage();
 		stunAnim.setFrameSpeed(curMove->getStunnedFrames());
 		if (state == CharState::launched) {
-			velocity.x *= ((isFlipped) ? -1.1 : 1.1);
+			velocity.x = ((isFlipped) ? std::abs(velocity.x) * launchForceMultiplier : std::abs(velocity.x) * -launchForceMultiplier);
 			velocity.y = -jumpForce;
+		}
+		else if (state == CharState::jumping) {
+			state == CharState::launched;
 		}
 		else {
 			state = CharState::stunned;
@@ -320,6 +346,7 @@ void Character::hitResponse(Move* curMove)
 
 void Character::collisionResponse(GameObject* collider)
 {
+	//Collision checks for other character and floor.
 	if (collider->getType() == ObjectType::character) {
 		if (collider->getPosition().x > getPosition().x) {
 			move(-5, 0);
@@ -330,8 +357,11 @@ void Character::collisionResponse(GameObject* collider)
 	}
 
 	if (collider->getType() == ObjectType::floor) {
-		if (state == CharState::launched) {
+		if (state == CharState::launched && health > 0) {
 			state = CharState::grounded;
+		}
+		else if (state == CharState::launched && health <= 0) {
+			state = CharState::death;
 		}
 		if (state == CharState::jumping) {
 			state = CharState::idle;
@@ -340,48 +370,30 @@ void Character::collisionResponse(GameObject* collider)
 	}
 }
 
+int Character::getRoundsWon()
+{
+	return roundsWon;
+}
+
+void Character::incrementRoundsWon()
+{
+	roundsWon++;
+}
+
 Move* Character::getCurrentMove()
 {
 	return currentMove;
 }
 
-std::vector<sf::RectangleShape> Character::getDebugMoveRects()
-{
-	std::vector<sf::RectangleShape> temp;
-	sf::RectangleShape moveBoxRect;
-	sf::RectangleShape lowHurtBox;
-	sf::RectangleShape highHurtBox;
-
-	moveBoxRect.setSize(sf::Vector2f(moveList[0]->getMoveHitbox().width, moveList[0]->getMoveHitbox().height));
-	lowHurtBox.setSize(sf::Vector2f(lowHitbox.width, lowHitbox.height));
-	highHurtBox.setSize(sf::Vector2f(highHitbox.width, highHitbox.height));
-
-	if (isFlipped) {
-		moveBoxRect.setPosition(getPosition().x + (getSize().x / 2) - moveList[0]->getMoveHitbox().left - moveList[0]->getMoveHitbox().width, moveList[0]->getMoveHitbox().top + getPosition().y);
-		lowHurtBox.setPosition(getPosition().x + (getSize().x / 2) - lowHitbox.left - lowHitbox.width, lowHitbox.top + getPosition().y);
-		highHurtBox.setPosition(getPosition().x + (getSize().x / 2) - highHitbox.left - highHitbox.width, highHitbox.top + getPosition().y);
-	}
-	else {
-		moveBoxRect.setPosition(getPosition().x + (getSize().x / 2) + moveList[0]->getMoveHitbox().left, moveList[0]->getMoveHitbox().top + getPosition().y);
-		lowHurtBox.setPosition(getPosition().x + (getSize().x / 2) + lowHitbox.left, lowHitbox.top + getPosition().y);
-		highHurtBox.setPosition(getPosition().x + (getSize().x / 2) + highHitbox.left, highHitbox.top + getPosition().y);
-	}
-
-	moveBoxRect.setFillColor(sf::Color::Blue);
-	temp.push_back(moveBoxRect);
-	lowHurtBox.setFillColor(sf::Color::Red);
-	temp.push_back(lowHurtBox);
-	highHurtBox.setFillColor(sf::Color::Green);
-	temp.push_back(highHurtBox);
-
-	return temp;
-}
-
 sf::FloatRect Character::getMoveRect()
 {
 	sf::FloatRect temp;
-	temp.height = moveList[0]->getMoveHitbox().height;
-	temp.width = moveList[0]->getMoveHitbox().width;
+	if (currentMove == nullptr) {
+		return temp;
+	}
+
+	temp.height = currentMove->getMoveHitbox().height;
+	temp.width = currentMove->getMoveHitbox().width;
 	if (isFlipped) {
 		temp.left = getPosition().x + (getSize().x / 2) - moveList[0]->getMoveHitbox().left - moveList[0]->getMoveHitbox().width;
 	}

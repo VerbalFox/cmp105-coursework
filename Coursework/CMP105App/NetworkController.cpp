@@ -1,43 +1,22 @@
 #include "NetworkController.h"
 
-NetworkController::NetworkController()
+void NetworkController::setFrameInput(sf::Uint32 timestamp, InputFrame input)
 {
+	frameTimestampRecieved = timestamp;
+	inputRecieved = input;
 }
 
-void NetworkController::setup()
+InputFrame NetworkController::frameDecision()
 {
-	std::cout << "Type (0) for client, (1) for server and anything else to break me." << std::endl;
-	std::cin >> isServer;
+	//Take latest input from delay queue.
+	if (inputDelayQueue.size() > 0) {
+		InputFrame temp = inputDelayQueue.front();
+		inputDelayQueue.pop_front();
+		pushFrameToBuffer(temp);
 
-	std::cout << ((isServer) ? "Server" : "Client") << std::endl;
-
-	if (isServer) {
-		socket.bind(55001);
+		return temp;
 	}
 	else {
-		socket.bind(55002);
+		return InputFrame();
 	}
-}
-
-InputFrame NetworkController::playFrame(sf::Uint32 timestamp)
-{
-	sf::Packet sentPacket;
-	sentPacket << timestamp;
-	if (isServer) {
-		socket.send(sentPacket, sf::IpAddress::getLocalAddress(), 55002);
-	}
-	else {
-		socket.send(sentPacket, sf::IpAddress::getLocalAddress(), 55001);
-	}
-
-	sf::Packet recievedPacket;
-	sf::IpAddress address;
-	unsigned short port;
-	socket.receive(recievedPacket, address, port);
-
-	sf::Uint32 timeStamp = {};
-	recievedPacket >> timeStamp;
-	std::cout << timeStamp << std::endl;
-
-	return InputFrame();
 }

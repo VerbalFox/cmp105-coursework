@@ -10,21 +10,6 @@ UIButton::UIButton(float posX, float posY, float sizeX, float sizeY, sf::RenderW
 	setCollisionBox(sf::FloatRect(0, 0, getSize().x, getSize().y));
 }
 
-void UIButton::setGameState(GameState* gs)
-{
-	gameState = gs;
-}
-
-void UIButton::setTargetState(State s)
-{
-	targetState = s;
-}
-
-void UIButton::changeState(State s)
-{
-	gameState->setCurrentState(s);
-}
-
 void UIButton::setInput(Input* in)
 {
 	input = in;
@@ -34,28 +19,40 @@ void UIButton::update()
 {
 	sf::Vector2f windowSize = sf::Vector2f(window->getSize().x, window->getSize().y);
 
-	setPosition(
-		(windowSize.x * (xPercentage / 100)) + (window->getView().getCenter().x - (windowSize.x / 2)),
-		(windowSize.y * (yPercentage / 100)) + (window->getView().getCenter().y - (windowSize.y / 2))
-	);
+	//Adjust positions and sizes in case of window size change. Didn't need to do this every frame, seems to cause stuttering as a result. Didn't have time to fix.
+	setPositionPercent(xPercentage, yPercentage);
+	setSizePercent(widthPercentage, heightPercentage);
 
-	setSize(sf::Vector2f(windowSize.x * (widthPercentage / 100), windowSize.y * (heightPercentage / 100)));
+	setCollisionBox(sf::FloatRect(0, 0, getSize().x, getSize().y));
 
+	//Map mouse position relative to screen.
 	sf::Vector2i temp = static_cast<sf::Vector2i>(window->mapPixelToCoords(sf::Mouse::getPosition(*window)));
 
+	//Highlight if hovered over.
 	if (Collision::checkBoundingBox(this, temp)) {
-		setFillColor(sf::Color::White);
-		if (isMouseDownLastFrame && !input->isMouseLDown()) {
-			changeState(targetState);
-		}
+		setFillColor(sf::Color::Red);
 	}
 	else {
 		setFillColor(sf::Color::Blue);
 	}
 
-	isMouseDownLastFrame = input->isMouseLDown();
+	//If a click down and up has been detected while hovering over the button.
+	if (isMouseDownLastFrame && !input->isMouseLDown() && Collision::checkBoundingBox(this, temp)) {
+		isMouseDownLastFrame = false;
+		//Call the function at the function pointer.
+		buttonFunction();
+	}
+	else {
+		//Keep track of presses to identify a button press later on.
+		isMouseDownLastFrame = input->isMouseLDown();
+	}
 }
 
 void UIButton::draw() {
 	window->draw(*this);
+}
+
+void UIButton::setButtonFunction(std::function<void()> func)
+{
+	buttonFunction = func;
 }

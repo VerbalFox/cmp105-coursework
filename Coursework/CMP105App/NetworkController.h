@@ -1,15 +1,14 @@
 #pragma once
-#include "SFML/Network.hpp"
-#include "InputFrame.h"
-#include <iostream>
+#include "Controller.h"
+#include <SFML/Main.hpp>
 
-class NetworkController
+class NetworkController :
+	public Controller
 {
-	sf::UdpSocket socket;
-	bool isServer;
+	sf::Uint32 frameTimestampRecieved = 0;
+	InputFrame inputRecieved = InputFrame();
 
 public:
-	NetworkController();
-	void setup();
-	InputFrame playFrame(sf::Uint32 timestamp);
+	void setFrameInput(sf::Uint32 timestamp, InputFrame input);
+	InputFrame frameDecision() override;
 };

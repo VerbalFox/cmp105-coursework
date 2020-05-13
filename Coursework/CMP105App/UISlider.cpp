@@ -9,6 +9,7 @@ UISlider::UISlider(float posX, float posY, float sizeX, float sizeY, sf::RenderW
 
 void UISlider::setSliderValues(float* maxVal, float* repVal)
 {
+	//I should probably have just done these by value. Does make it easier to work with.
 	representedValue = repVal;
 	maxValue = maxVal;
 }
@@ -31,11 +32,7 @@ void UISlider::update()
 	outline.setSize(getSize());
 	slider.setSize(sf::Vector2f(std::max(getSize().x * (*representedValue / *maxValue), 0.f), getSize().y));
 
-	setPosition(
-		(windowSize.x * (xPercentage / 100)) + (window->getView().getCenter().x - (windowSize.x / 2)),
-		(windowSize.y * (yPercentage / 100)) + (window->getView().getCenter().y - (windowSize.y / 2))
-	);
-
+	setPositionPercent(xPercentage, yPercentage);
 	setSizePercent(widthPercentage, heightPercentage);
 
 	outline.setPosition(getPosition());
